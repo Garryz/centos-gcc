@@ -24,6 +24,7 @@ RUN rpm --rebuilddb \
 	&& yum -y install \
 		devtoolset-3-gcc \
 		devtoolset-3-gcc-c++ \
+		devtoolset-3-gdb \
 		rh-python35 \
 		cmake3 \
 		lrzsz \
