@@ -25,7 +25,10 @@ RUN rpm --rebuilddb \
 		devtoolset-3-gcc \
 		devtoolset-3-gcc-c++ \
 		devtoolset-3-gdb \
-		rh-python35 \
+		python27-python \
+		python27-python-devel \
+		pyhton33-python \
+		python33-python-devel \
 		cmake3 \
 		lrzsz \
 		git \
@@ -45,7 +48,8 @@ RUN rpm --rebuilddb \
 	&& rm -rf /sbin/sln \
 	&& rm -rf /usr/{{lib,share}/locale,share/{man,doc,info,cracklib,i18n},{lib,lib64}/gconv,bin/localedef,sbin/build-locale-archive} \
 	&& rm -rf /opt/rh/devtoolset-3/root/usr/{{lib,share}/locale,share/{man,doc,info,cracklib,i18n},{lib,lib64}/gconv,bin/localedef,sbin/build-locale-archive} \
-	&& rm -rf /opt/rh-python35/root/usr/{{lib,share}/locale,share/{man,doc,info,cracklib,i18n},{lib,lib64}/gconv,bin/localedef,sbin/build-locale-archive} \
+	&& rm -rf /opt/python27/root/usr/{{lib,share}/locale,share/{man,doc,info,cracklib,i18n},{lib,lib64}/gconv,bin/localedef,sbin/build-locale-archive} \
+	&& rm -rf /opt/python33/root/usr/{{lib,share}/locale,share/{man,doc,info,cracklib,i18n},{lib,lib64}/gconv,bin/localedef,sbin/build-locale-archive} \
 	&& rm -rf /{root,tmp,var/cache/{ldconfig,yum}}/* \
 	&& > /etc/sysconfig/i18n
 
