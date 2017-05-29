@@ -28,7 +28,6 @@ RUN rpm --rebuilddb \
 		rh-python35 \
 		cmake3 \
 		lrzsz \
-		vim \
 		git \
 		ctags \
 		mlocate \
