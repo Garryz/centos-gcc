@@ -101,20 +101,3 @@ ENV AUTHORIZED_KEYS **None**
 
 EXPOSE 22
 CMD ["/run.sh"]
-
-	&& rm -rf /{root,tmp,var/cache/{ldconfig,yum}}/* \
-	&& > /etc/sysconfig/i18n
-
-RUN ln -sf \
-		/usr/share/zoneinfo/UTC \
-		/etc/localtime \
-	&& echo "NETWORKING=yes" > /etc/sysconfig/network
-
-ADD set_root_pw.sh /set_root_pw.sh
-ADD run.sh /run.sh
-RUN chmod +x /*.sh
-
-ENV AUTHORIZED_KEYS **None**
-
-EXPOSE 22
-CMD ["/run.sh"]
