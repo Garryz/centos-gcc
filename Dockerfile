@@ -22,22 +22,56 @@ RUN rpm --rebuilddb \
 	&& rpm --import \
 		/etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-SIG-SCLo \
 	&& yum -y install \
-		devtoolset-3-gcc \
-		devtoolset-3-gcc-c++ \
-		devtoolset-3-gdb \
+		cmake3 \
+		ctags \
+		gcc \
+		gcc-c++ \
+		git \
+		lrzsz \
+		mlocate \
 		python27-python \
 		python27-python-devel \
 		pyhton33-python \
 		python33-python-devel \
-		cmake3 \
-		lrzsz \
-		git \
-		ctags \
-		mlocate \
 		wget \
 		xz \
+		zlib-devel \
 	&& rm -rf /usr/bin/cmake \
 	&& ln -s /usr/bin/cmake3 /usr/bin/cmake \
+	&& cd /tmp \
+	&& wget -O gcc.tar http://ftpmirror.gnu.org/gcc/gcc-4.9.4/gcc-4.9.4.tar.gz \
+	&& mkdir -p gcc \
+	&& tar -xzf gcc.tar -C gcc --strip-components=1 \
+	&& cd gcc \
+	&& ./contrib/download_prerequisites \
+	&& cd .. \
+	&& mkdir -p gcc-build \
+	&& cd gcc-build \
+	&& ../gcc/configure \
+		--enable-bootstrap \
+		--enable-shared \
+		--enable-threads=posix \
+		--enable-checking=release \
+		--with-system-zlib \
+		--enable-__cxa_atexit \
+		--disable-libunwind-exceptions \
+		--enable-gnu-unique-object \
+		--enable-linker-build-id \
+		--enable-plugin \
+		--with-linker-hash-style=gnu \
+		--enable-initfini-array \
+		--disable-libgcj \
+		--enable-languages=c,c++ \
+		--disable-multilib \
+		--with-isl \
+		--with-ppl \
+		--with-cloog \
+		--with-tune=generic \
+		--with-arch_32=i686 \
+		--build=x86_64-redhat-linux \
+	&& make -j4 \
+	&& make install \
+	&& yum -y remove gcc gcc-c++ \
 	&& yum clean all \
 	&& find /usr/share \
 		-type f \
@@ -47,7 +81,6 @@ RUN rpm --rebuilddb \
 	&& rm -rf /etc/ld.so.cache \
 	&& rm -rf /sbin/sln \
 	&& rm -rf /usr/{{lib,share}/locale,share/{man,doc,info,cracklib,i18n},{lib,lib64}/gconv,bin/localedef,sbin/build-locale-archive} \
-	&& rm -rf /opt/rh/devtoolset-3/root/usr/{{lib,share}/locale,share/{man,doc,info,cracklib,i18n},{lib,lib64}/gconv,bin/localedef,sbin/build-locale-archive} \
 	&& rm -rf /opt/python27/root/usr/{{lib,share}/locale,share/{man,doc,info,cracklib,i18n},{lib,lib64}/gconv,bin/localedef,sbin/build-locale-archive} \
 	&& rm -rf /opt/python33/root/usr/{{lib,share}/locale,share/{man,doc,info,cracklib,i18n},{lib,lib64}/gconv,bin/localedef,sbin/build-locale-archive} \
 	&& rm -rf /{root,tmp,var/cache/{ldconfig,yum}}/* \
@@ -58,8 +91,25 @@ RUN ln -sf \
 		/etc/localtime \
 	&& echo "NETWORKING=yes" > /etc/sysconfig/network
 
-ADD gcc.sh /etc/profile.d/
-ADD gcc.csh /etc/profile.d/
+ADD python33.sh /etc/profile.d/
+ADD python33.csh /etc/profile.d/
+ADD set_root_pw.sh /set_root_pw.sh
+ADD run.sh /run.sh
+RUN chmod +x /*.sh
+
+ENV AUTHORIZED_KEYS **None**
+
+EXPOSE 22
+CMD ["/run.sh"]
+
+	&& rm -rf /{root,tmp,var/cache/{ldconfig,yum}}/* \
+	&& > /etc/sysconfig/i18n
+
+RUN ln -sf \
+		/usr/share/zoneinfo/UTC \
+		/etc/localtime \
+	&& echo "NETWORKING=yes" > /etc/sysconfig/network
+
 ADD set_root_pw.sh /set_root_pw.sh
 ADD run.sh /run.sh
 RUN chmod +x /*.sh
