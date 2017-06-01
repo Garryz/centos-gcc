@@ -5,13 +5,10 @@ RUN rpm --rebuilddb \
 		http://mirror.centos.org/centos/RPM-GPG-KEY-CentOS-6 \
 	&& rpm --import \
 		https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-6 \
-	&& rpm --import \
-		https://dl.iuscommunity.org/pub/ius/IUS-COMMUNITY-GPG-KEY \
 	&& yum -y install \
 		centos-release-scl \
 		centos-release-scl-rh \
 		epel-release \
-		https://centos6.iuscommunity.org/ius-release.rpm \
 		openssh-server \
 		pwgen \
 	&& rm -f /etc/ssh/ssh_host_dsa_key /etc/ssh/ssh_host_rsa_key \
@@ -22,10 +19,11 @@ RUN rpm --rebuilddb \
 	&& rpm --import \
 		/etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-SIG-SCLo \
 	&& yum -y install \
-		cmake3 \
+		cmake \
 		ctags \
 		gcc \
 		gcc-c++ \
+		gdb \
 		git \
 		lrzsz \
 		mlocate \
@@ -36,8 +34,6 @@ RUN rpm --rebuilddb \
 		wget \
 		xz \
 		zlib-devel \
-	&& rm -rf /usr/bin/cmake \
-	&& ln -s /usr/bin/cmake3 /usr/bin/cmake \
 	&& cd /tmp \
 	&& wget -O gcc.tar http://ftpmirror.gnu.org/gcc/gcc-4.9.4/gcc-4.9.4.tar.gz \
 	&& mkdir -p gcc \
@@ -80,16 +76,10 @@ RUN rpm --rebuilddb \
 		-delete \
 	&& rm -rf /etc/ld.so.cache \
 	&& rm -rf /sbin/sln \
-	&& rm -rf /usr/{{lib,share}/locale,share/{man,doc,info,cracklib,i18n},{lib,lib64}/gconv,bin/localedef,sbin/build-locale-archive} \
-	&& rm -rf /opt/python27/root/usr/{{lib,share}/locale,share/{man,doc,info,cracklib,i18n},{lib,lib64}/gconv,bin/localedef,sbin/build-locale-archive} \
-	&& rm -rf /opt/python33/root/usr/{{lib,share}/locale,share/{man,doc,info,cracklib,i18n},{lib,lib64}/gconv,bin/localedef,sbin/build-locale-archive} \
-	&& rm -rf /{root,tmp,var/cache/{ldconfig,yum}}/* \
-	&& > /etc/sysconfig/i18n
-
-RUN ln -sf \
-		/usr/share/zoneinfo/UTC \
-		/etc/localtime \
-	&& echo "NETWORKING=yes" > /etc/sysconfig/network
+	&& rm -rf /usr/{{lib,share}/locale,share/i18n,{lib,lib64}/gconv,bin/localedef,sbin/build-locale-archive} \
+	&& rm -rf /opt/python27/root/usr/{{lib,share}/locale,share/i18n,{lib,lib64}/gconv,bin/localedef,sbin/build-locale-archive} \
+	&& rm -rf /opt/python33/root/usr/{{lib,share}/locale,share/i18n,{lib,lib64}/gconv,bin/localedef,sbin/build-locale-archive} \
+	&& rm -rf /{root,tmp,var/cache/{ldconfig,yum}}/*
 
 ADD python33.sh /etc/profile.d/
 ADD python33.csh /etc/profile.d/
