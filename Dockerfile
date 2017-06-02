@@ -77,8 +77,8 @@ RUN rpm --rebuilddb \
 	&& rm -rf /etc/ld.so.cache \
 	&& rm -rf /sbin/sln \
 	&& rm -rf /usr/{{lib,share}/locale,share/i18n,{lib,lib64}/gconv,bin/localedef,sbin/build-locale-archive} \
-	&& rm -rf /opt/python27/root/usr/{{lib,share}/locale,share/i18n,{lib,lib64}/gconv,bin/localedef,sbin/build-locale-archive} \
-	&& rm -rf /opt/python33/root/usr/{{lib,share}/locale,share/i18n,{lib,lib64}/gconv,bin/localedef,sbin/build-locale-archive} \
+	&& rm -rf /opt/rh/python27/root/usr/{{lib,share}/locale,share/i18n,{lib,lib64}/gconv,bin/localedef,sbin/build-locale-archive} \
+	&& rm -rf /opt/rh/python33/root/usr/{{lib,share}/locale,share/i18n,{lib,lib64}/gconv,bin/localedef,sbin/build-locale-archive} \
 	&& rm -rf /{root,tmp,var/cache/{ldconfig,yum}}/*
 
 ADD python33.sh /etc/profile.d/
